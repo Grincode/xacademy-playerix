@@ -1,0 +1,48 @@
+name: playerix
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: playerix-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: playerix
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: playerix_user
+      MYSQL_PASSWORD: playerix_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - playerix_mysql_data:/var/lib/mysql
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: playerix-backend
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      DATABASE_HOST: db
+      DATABASE_PORT: 3306
+      DATABASE_USER: playerix_user
+      DATABASE_PASSWORD: playerix_password
+      DATABASE_NAME: playerix
+      JWT_SECRET: playerix_super_secret
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: playerix-frontend
+    restart: always
+    ports:
+      - "4201:80"
+    depends_on:
+      - backend
+
+volumes:
+  playerix_mysql_data:
