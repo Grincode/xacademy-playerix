@@ -2,8 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import * as bcrypt from 'bcrypt';
 import { UsersService } from './users/users.service';
+import * as bcrypt from 'bcrypt';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,11 +28,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  // Seed user login
+  // Seed: crear/actualizar usuario admin (ver sección 11)
   const usersService = app.get(UsersService);
   const adminEmail = 'admin@fifa.com';
-  const hashedPassword = await bcrypt.hash('admin123', 10);
   const adminUser = await usersService.findOneByEmail(adminEmail);
+  const hashedPassword = await bcrypt.hash('admin123', 10);
 
   if (!adminUser) {
     await usersService.create({

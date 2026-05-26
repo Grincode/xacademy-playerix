@@ -2,53 +2,60 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToOne,
+  ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import { Player } from './player.entity';
 
-@Entity()
+@Entity('player_skills')
 export class PlayerSkill {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ default: 0 })
+  @Column({ name: 'player_id' })
+  playerId: number;
+
+  @Column({ name: 'fifa_version' })
+  fifaVersion: number;
+
+  @Column()
   pace: number;
 
-  @Column({ default: 0 })
+  @Column()
   shooting: number;
 
-  @Column({ default: 0 })
+  @Column()
   passing: number;
 
-  @Column({ default: 0 })
+  @Column()
   dribbling: number;
 
-  @Column({ default: 0 })
+  @Column()
   defending: number;
 
-  @Column({ default: 0 })
+  @Column()
   physical: number;
 
-  @Column({ name: 'goalkeeping_diving', default: 0 })
-  goalkeepingDiving: number;
+  // GK specific stats
+  @Column({ name: 'gk_diving', default: 0 })
+  gkDiving: number;
 
-  @Column({ name: 'goalkeeping_handling', default: 0 })
-  goalkeepingHandling: number;
+  @Column({ name: 'gk_handling', default: 0 })
+  gkHandling: number;
 
-  @Column({ name: 'goalkeeping_kicking', default: 0 })
-  goalkeepingKicking: number;
+  @Column({ name: 'gk_kicking', default: 0 })
+  gkKicking: number;
 
-  @Column({ name: 'goalkeeping_reflexes', default: 0 })
-  goalkeepingReflexes: number;
+  @Column({ name: 'gk_positioning', default: 0 })
+  gkPositioning: number;
 
-  @Column({ name: 'goalkeeping_speed', default: 0 })
-  goalkeepingSpeed: number;
+  @Column({ name: 'gk_reflexes', default: 0 })
+  gkReflexes: number;
 
-  @Column({ name: 'goalkeeping_positioning', default: 0 })
-  goalkeepingPositioning: number;
+  @Column({ name: 'gk_speed', default: 0 })
+  gkSpeed: number;
 
-  @OneToOne(() => Player)
-  @JoinColumn()
+  @ManyToOne(() => Player, (player) => player.skills)
+  @JoinColumn({ name: 'player_id' })
   player: Player;
 }
