@@ -1,5 +1,9 @@
 # PlayerIX
 
+<p align="center">
+  <img src="frontend/public/img/playerix_logo.png" alt="PlayerIX Logo" width="300">
+</p>
+
 Aplicación de scouting de fútbol basada en datos históricos de EA Sports FC (ex FIFA).
 Permite gestionar jugadores con sus atributos técnicos a través de distintas versiones del juego (FIFA 15 — FC 24).
 
@@ -42,8 +46,9 @@ playerix/
 git clone <repo-url>
 cd playerix
 
-# Copiar variables de entorno
+# Copiar variables de entorno y configurar
 cp .env.example .env
+# Editar .env con tus valores (DB, JWT secret, etc.)
 
 # Levantar todos los servicios
 docker compose up -d
@@ -57,6 +62,8 @@ docker compose exec backend npm run seed
 | Frontend  | http://localhost:4201       |
 | API       | http://localhost:3001/api   |
 | Swagger   | http://localhost:3001/api/docs |
+
+> El archivo `.env` contiene credenciales sensibles (DB, JWT secret) y **no está subido al repo**. Usá siempre `.env.example` como plantilla y nunca commits el `.env`.
 
 Credenciales del seed: `admin@fifa.com` / `admin123`.
 
