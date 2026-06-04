@@ -33,6 +33,8 @@ Thumbs.db
 # Docker
 mysql_data/
 
+# AI tooling (local only)
+.atl/
 
 # Temporary files
 tmp/
