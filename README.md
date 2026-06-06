@@ -9,12 +9,12 @@ Permite gestionar jugadores con sus atributos técnicos a través de distintas v
 
 ## Stack
 
-| Capa       | Tecnología                         |
-|------------|------------------------------------|
-| Backend    | NestJS, TypeORM, Passport JWT      |
-| Frontend   | Angular 19 (Standalone + Signals)  |
-| Base datos | MySQL 8.0                          |
-| Infra      | Docker Compose, Nginx              |
+| Capa       | Tecnología                        |
+| ---------- | --------------------------------- |
+| Backend    | NestJS, TypeORM, Passport JWT     |
+| Frontend   | Angular 19 (Standalone + Signals) |
+| Base datos | MySQL 8.0                         |
+| Infra      | Docker Compose, Nginx             |
 
 ## Estructura del proyecto
 
@@ -57,11 +57,11 @@ docker compose up -d
 docker compose exec backend npm run seed
 ```
 
-| Servicio  | URL                        |
-|-----------|----------------------------|
-| Frontend  | http://localhost:4201       |
-| API       | http://localhost:3001/api   |
-| Swagger   | http://localhost:3001/api/docs |
+| Servicio | URL                            |
+| -------- | ------------------------------ |
+| Frontend | <http://localhost:4201>          |
+| API      | <http://localhost:3001/api>      |
+| Swagger  | <http://localhost:3001/api/docs> |
 
 > El archivo `.env` contiene credenciales sensibles (DB, JWT secret) y **no está subido al repo**. Usá siempre `.env.example` como plantilla y nunca commits el `.env`.
 
@@ -80,7 +80,7 @@ Credenciales del seed: `admin@fifa.com` / `admin123`.
 
 ## Lo que queda pendiente
 
-- **Comparativa visual entre versiones de FIFA**: seleccionar dos o más ediciones y ver la evolución de atributos de un jugador lado a lado (radar superpuesto o tabla comparativa). No se alcanzó a completar.
+- **Comparativa visual entre versiones de FIFA**: seleccionar dos o más ediciones y ver la evolución de atributos de un jugador lado a lado (radar superpuesto o tabla comparativa). No se alcanzó a completar para todas las versiones de fifa aun que para algunos jugadores si quedo funcional.
 
 ## Agradecimientos
 
