@@ -11,9 +11,14 @@ import { UserService, AppUser } from '../../../core/services/user.service';
     <div class="admin-page">
       <div class="page-header">
         <h2>Usuarios</h2>
-        <a routerLink="/admin/users/new" class="btn btn-primary">
-          + Nuevo Usuario
-        </a>
+        <div class="header-actions">
+          <a routerLink="/players" class="btn btn-secondary">
+            ← Jugadores
+          </a>
+          <a routerLink="/admin/users/new" class="btn btn-primary">
+            + Nuevo Usuario
+          </a>
+        </div>
       </div>
 
       <div class="card">
@@ -74,6 +79,10 @@ import { UserService, AppUser } from '../../../core/services/user.service';
       }
       .page-header h2 {
         margin: 0;
+      }
+      .header-actions {
+        display: flex;
+        gap: 8px;
       }
       .card {
         background: var(--card-bg);

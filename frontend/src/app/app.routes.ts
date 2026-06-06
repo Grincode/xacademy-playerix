@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/login.component';
+import { RegisterComponent } from './features/auth/register.component';
 import { PlayerListComponent } from './features/players/player-list/player-list.component';
 import { PlayerDetailComponent } from './features/players/player-detail/player-detail.component';
 import { PlayerEditComponent } from './features/players/player-edit/player-edit.component';
@@ -10,6 +11,7 @@ import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   {
     path: 'players',
     canActivate: [authGuard],

@@ -1,7 +1,7 @@
 # PlayerIX
 
 <p align="center">
-  <img src="frontend/public/img/playerix_logo.png" alt="PlayerIX Logo" width="300">
+  <img src="frontend/public/img/logonew.png" alt="PlayerIX Logo" width="300">
 </p>
 
 Aplicación de scouting de fútbol basada en datos históricos de EA Sports FC (ex FIFA).
