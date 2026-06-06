@@ -13,6 +13,9 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { mkdirSync } from 'fs';
 import {
   ApiTags,
   ApiBearerAuth,
@@ -21,7 +24,7 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { PlayersService } from './players.service';
-import { ImportService } from './import.service';
+import { ImportService, ImportStats } from './import.service';
 import { FilterPlayersDto } from './dto/filter-players.dto';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
@@ -50,10 +53,27 @@ export class PlayersController {
       properties: { file: { type: 'string', format: 'binary' } },
     },
   })
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: (_req, _file, cb) => {
+          const dir = '/tmp/uploads';
+          mkdirSync(dir, { recursive: true });
+          cb(null, dir);
+        },
+        filename: (_req, file, cb) => {
+          cb(
+            null,
+            `import-${Date.now()}-${Math.random().toString(36).slice(2)}${extname(file.originalname)}`,
+          );
+        },
+      }),
+      limits: { fileSize: 100 * 1024 * 1024 },
+    }),
+  )
   async importCsv(@UploadedFile() file: Express.Multer.File) {
     if (!file) throw new NotFoundException('No file uploaded');
-    return this.importService.importCsv(file.buffer.toString());
+    return this.importService.importCsv(file.path);
   }
 
   @Post()

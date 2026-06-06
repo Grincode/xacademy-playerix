@@ -7,10 +7,7 @@ import { PlayersController } from './players.controller';
 describe('PlayersController', () => {
   describe('guards and roles metadata', () => {
     it('should have JwtAuthGuard and RolesGuard at class level', () => {
-      const guards = Reflect.getMetadata(
-        '__guards__',
-        PlayersController,
-      );
+      const guards = Reflect.getMetadata('__guards__', PlayersController);
 
       expect(guards).toBeDefined();
       expect(guards).toHaveLength(2);
