@@ -48,4 +48,9 @@ export class FilterPlayersDto {
   @Min(1)
   @Max(100)
   limit?: number = 10;
+
+  @ApiProperty({ required: false, description: 'Export all, disables pagination' })
+  @IsOptional()
+  @Type(() => Boolean)
+  export?: boolean;
 }

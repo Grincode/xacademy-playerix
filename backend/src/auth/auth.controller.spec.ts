@@ -21,7 +21,7 @@ describe('AuthController', () => {
     }).compile();
 
     authController = module.get<AuthController>(AuthController);
-    authService = module.get(AuthService) as jest.Mocked<AuthService>;
+    authService = module.get(AuthService);
   });
 
   describe('register', () => {

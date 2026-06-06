@@ -924,7 +924,9 @@ export class PlayerListComponent implements OnInit {
   }
 
   exportData(): void {
-    this.exportService.exportToExcel(this.players, 'fifa_players_export');
+    this.playersService.getPlayers({ ...this.filters, page: 1, limit: 10, export: true }).subscribe((response) => {
+      this.exportService.exportToExcel(response.data, 'fifa_players_export');
+    });
   }
 
   onImageError(event: any, type: 'nation' | 'club' | 'player'): void {

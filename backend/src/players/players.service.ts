@@ -26,6 +26,7 @@ export class PlayersService {
       fifaVersion,
       page = 1,
       limit = 10,
+      export: isExport,
     } = filterDto;
     const query = this.playerRepository
       .createQueryBuilder('player')
@@ -70,6 +71,12 @@ export class PlayersService {
     }
 
     query.orderBy('player.overallRating', 'DESC');
+
+    if (isExport) {
+      const players = await query.getMany();
+      return { data: players, total: players.length, page: 1, limit: players.length };
+    }
+
     const [players, total] = await query
       .skip((page - 1) * limit)
       .take(limit)
