@@ -30,6 +30,13 @@ export class AuthService {
       );
   }
 
+  register(credentials: {
+    email: string;
+    password: string;
+  }): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.API_URL}/register`, credentials);
+  }
+
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     this.currentUser.set(null);

@@ -16,7 +16,7 @@ import { FitTextDirective } from '../../../core/directives/fit-text.directive';
     <div class="container">
       <div class="header-actions">
         <img
-          src="/img/playerix_logo.png"
+          src="/img/logonew.png"
           alt="PlayerIX"
           class="header-logo"
         />

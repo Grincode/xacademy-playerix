@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -6,11 +6,11 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   template: `
@@ -22,50 +22,70 @@ import { AuthService } from '../../core/services/auth.service';
           class="login-logo"
         />
         <p class="subtitle">
-          Portal de Scouting — Ingresá tus credenciales
+          Creá tu cuenta de scouting
         </p>
 
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
-            <label>Email del Staff</label>
+            <label>Email</label>
             <input
               type="email"
               formControlName="email"
               class="form-control"
-              placeholder="staff@playerix.com"
+              [class.field-error]="
+                registerForm.get('email')?.invalid && registerForm.get('email')?.touched
+              "
+              placeholder="scout@playerix.com"
             />
+            <div
+              class="field-feedback"
+              *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+            >
+              Ingresá un email válido
+            </div>
           </div>
 
           <div class="form-group">
-            <label>Contraseña Segura</label>
+            <label>Contraseña</label>
             <input
               type="password"
               formControlName="password"
               class="form-control"
+              [class.field-error]="
+                registerForm.get('password')?.invalid && registerForm.get('password')?.touched
+              "
               placeholder="••••••••"
             />
+            <div
+              class="field-feedback"
+              *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+            >
+              Mínimo 6 caracteres
+            </div>
           </div>
 
           <button
             type="submit"
-            [disabled]="loginForm.invalid"
+            [disabled]="registerForm.invalid || loading"
             class="btn btn-primary login-btn"
+            [class.btn-disabled]="registerForm.invalid"
           >
-            Ingresar
+            <span *ngIf="loading" class="spinner"></span>
+            {{ loading ? 'Registrando...' : 'Crear Cuenta' }}
           </button>
-
-          <div *ngIf="successMessage" class="success-message">
-            <span class="icon">✓</span> {{ successMessage }}
-          </div>
 
           <div *ngIf="errorMessage" class="error-message">
             <span class="icon">⚠️</span> {{ errorMessage }}
           </div>
 
-          <div class="register-link">
-            ¿No tenés cuenta? <a routerLink="/register">Crear cuenta</a>
+          <div *ngIf="successMessage" class="success-message">
+            <span class="icon">✓</span> {{ successMessage }}
           </div>
         </form>
+
+        <div class="register-link">
+          ¿Ya tenés cuenta? <a routerLink="/login">Iniciar sesión</a>
+        </div>
 
         <div class="card-footer">Herramienta Oficial de Scouting v2.0</div>
       </div>
@@ -130,6 +150,31 @@ import { AuthService } from '../../core/services/auth.service';
       .form-control:focus {
         border-color: var(--accent-color);
       }
+      .field-error {
+        border-color: var(--danger, #dc3545) !important;
+      }
+      .field-feedback {
+        font-size: 0.75rem;
+        color: var(--danger, #dc3545);
+        margin-top: 4px;
+      }
+      .btn-disabled {
+        opacity: 0.5;
+      }
+      .spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+        margin-right: 6px;
+        vertical-align: middle;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
       .login-btn {
         margin-top: 10px;
         padding: 15px;
@@ -176,34 +221,46 @@ import { AuthService } from '../../core/services/auth.service';
     `,
   ],
 })
-export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
+export class RegisterComponent {
+  registerForm: FormGroup;
   errorMessage: string = '';
   successMessage: string = '';
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute,
   ) {
-    this.loginForm = this.fb.group({
+    this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
-  ngOnInit(): void {
-    if (this.route.snapshot.queryParams['registered'] === 'true') {
-      this.successMessage = '¡Usuario creado correctamente! Iniciá sesión.';
-    }
-  }
-
   onSubmit(): void {
-    if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe({
-        next: () => this.router.navigate(['/players']),
-        error: (err) => (this.errorMessage = 'Email o contraseña incorrectos'),
+    if (this.registerForm.valid) {
+      this.loading = true;
+      this.errorMessage = '';
+      this.successMessage = '';
+      this.authService.register(this.registerForm.value).subscribe({
+        next: () => {
+          this.successMessage = '¡Usuario creado correctamente!';
+          setTimeout(() => {
+            this.router.navigate(['/login'], {
+              queryParams: { registered: 'true' },
+            });
+          }, 1500);
+        },
+        error: (err) => {
+          this.loading = false;
+          if (err.status === 409) {
+            this.errorMessage = 'Ese email ya está registrado';
+          } else {
+            this.errorMessage =
+              err.error?.message || err.message || 'Error al registrarse';
+          }
+        },
       });
     }
   }
